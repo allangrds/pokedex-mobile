@@ -6,6 +6,7 @@
 - [Installation](#installation)
 - [How to execute](#how-to-execute)
 - [Technologies](#technologies)
+- [Tech decisions](#tech-decisions)
 
 ## Requeriments
 
@@ -24,3 +25,7 @@
 - React 18.2.0
 - React Native 0.71.3
 - Expo 48.0.5
+
+## Tech decisions
+
+- I used Expo instead of pure React Native to make development easier. This is a very small application, and it needs to have speed to be able to do it;
