@@ -25,6 +25,7 @@
 - React 18.2.0
 - React Native 0.71.3
 - Expo 48.0.5
+- Typescript 4.9.4
 
 ## Tech decisions
 
