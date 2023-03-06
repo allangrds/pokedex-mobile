@@ -1,8 +1,5 @@
 import * as eva from '@eva-design/eva'
-import {
-  ApplicationProvider,
-  IconRegistry,
-} from '@ui-kitten/components'
+import { ApplicationProvider, IconRegistry } from '@ui-kitten/components'
 import { EvaIconsPack } from '@ui-kitten/eva-icons'
 
 type Props = {
@@ -13,7 +10,7 @@ export const UiKittenProvider = ({ children }: Props) => (
   <>
     <IconRegistry icons={EvaIconsPack} />
     <ApplicationProvider {...eva} theme={eva.light}>
-      { children }
+      {children}
     </ApplicationProvider>
   </>
 )
