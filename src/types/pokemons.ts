@@ -1,11 +1,11 @@
-type Pokemon = {
+export type PokemonsResults = {
   name: string
   url: string
 }
 
 export type PokemonsResponse = {
   count: number
-  next: string
+  next: string | null
   previous: string
   results: Pokemon[] | []
 }

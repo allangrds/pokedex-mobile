@@ -7,12 +7,10 @@ type Parameters = {
 
 export const listPokemons = (
   api: Api,
-  parameters: Parameters = {
-    limit: 5,
-    offset: 0,
-  }
+  parameters: Parameters
 ): Promise<PokemonsResponse> => {
-  const { limit, offset } = parameters
+  const { limit = 8, offset = 0 } = parameters
+
   const endpoint = `pokemon?offset=${offset}&limit=${limit}`
 
   return api.get(endpoint)
