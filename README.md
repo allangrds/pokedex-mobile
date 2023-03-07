@@ -7,6 +7,7 @@
 - [How to execute](#how-to-execute)
 - [Technologies](#technologies)
 - [Tech decisions](#tech-decisions)
+- [Demo video](#demo-video)
 
 ## Requeriments
 
@@ -32,3 +33,7 @@
 
 - I used Expo instead of pure React Native to make development easier. This is a very small application, and it needs to have speed to be able to do it;
 - I split the service layer to try to make things as decoupled as possible. Normally I would have a service that would import the axios or a fetch api and make a request. My idea was that the service layer has no implementation details, just a known interface and uses its methods. In addition, the requester(axios, fetch) itself would not have prior knowledge of the service url, receiving it as a parameter. To work around this, I ended up creating a context to receive the api url, and this api url, via context, would be imported into the hook and then passed to the request service;
+
+## Demo video
+
+https://user-images.githubusercontent.com/4103305/223518709-a3f97ac5-12e6-4240-8fb6-3ae55f6a3bb1.mov
