@@ -1,4 +1,4 @@
-# Z1 Mobile Test
+# Pokedex Mobile
 
 ## Table of content
 
