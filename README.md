@@ -11,6 +11,7 @@
 ## Requeriments
 
 - Volta 1.1.0 or Node 16.18.1
+- iOs Simulator or Android Simulator
 
 ## Installation
 
