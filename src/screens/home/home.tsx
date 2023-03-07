@@ -1,30 +1,116 @@
 import * as React from 'react'
 
-import { Layout, Text } from '@ui-kitten/components'
-import { Button, Icon } from '@ui-kitten/components'
+import { RefreshControl, View } from 'react-native'
+import { Input, Layout, List, ListItem, Text } from '@ui-kitten/components'
 
+import { Alert, Loading, PokemonListItem } from '../../components'
 import { usePokemons } from '../../hooks'
+import { PokemonShortResponse } from '../../types'
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const FacebookIcon = (props: any) => <Icon name="facebook" {...props} />
+import { styles } from './home.styles'
 
-const LoginButton = () => (
-  <Button accessoryLeft={FacebookIcon}>Login with Facebook</Button>
-)
+let timeoutId: ReturnType<typeof setTimeout>
 
 export const HomeScreen = () => {
-  const { listPokemons } =
-    usePokemons()
+  const [shouldLoadMore, setShouldLoadMore] = React.useState<boolean>(true)
+  const {
+    errorPokemons,
+    find,
+    list,
+    loadMore,
+    loadingPokemons,
+    pokemons,
+    refreshingPokemons,
+  } = usePokemons()
+  const pokemonsExists = pokemons ? pokemons.length > 0 : false
 
-  React.useEffect(() => {
-    listPokemons()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  const handleOnLoadMore = () => loadMore()
+  const handleOnRefresh = () => list('REFRESH')
+  const handleOnChange = (text: string) => {
+    clearTimeout(timeoutId)
+
+    timeoutId = setTimeout(() => {
+      if (text.length === 0) {
+        setShouldLoadMore(true)
+        list()
+        return
+      }
+
+      setShouldLoadMore(false)
+      find(text)
+    }, 1500)
+  }
+
+  const renderItem = (
+    { item }: { item: PokemonShortResponse}
+  ) => (
+    <ListItem style={styles.listItemWrapper}>
+      <PokemonListItem
+        name={item.name}
+        artwork={item.artwork}
+        types={item.types}
+      />
+    </ListItem>
+  )
 
   return (
-    <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text category="h1">HOME WITH ROUTER 3</Text>
-      <LoginButton />
+    <Layout style={styles.wrapper}>
+      <View style={styles.inputWrapper}>
+        <Input
+          placeholder="Pokemon name..."
+          autoCapitalize="none"
+          size="large"
+          onChangeText={handleOnChange}
+        />
+      </View>
+      {
+        loadingPokemons ? (
+          <Loading />
+        ) : undefined
+      }
+      {
+        errorPokemons ? (
+          <View style={styles.alertWrapper}>
+            <Alert
+              text="An error occurred while getting the pokemon list"
+              type="danger"
+            />
+          </View>
+        ) : undefined
+      }
+      {
+        (!loadingPokemons && !errorPokemons && !pokemonsExists) ? (
+          <View style={styles.emptyPokemonsWrapper}>
+            <Text style={styles.emptyPokemonsText}>
+              No pokemons found
+            </Text>
+          </View>
+        ) : undefined
+      }
+      {
+        (!loadingPokemons && !errorPokemons && pokemonsExists) ? (
+          <List
+            style={styles.listWrapper}
+            data={pokemons}
+            keyExtractor={(item) => String(item.id)}
+            renderItem={renderItem}
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshingPokemons}
+                progressViewOffset={100}
+                onRefresh={handleOnRefresh}
+              />
+            }
+            onEndReached={() => {
+              if (shouldLoadMore) {
+                handleOnLoadMore()
+              }
+            }}
+            onEndReachedThreshold={0.8}
+            ListFooterComponent={shouldLoadMore? <Loading /> : undefined}
+          />
+        ) : undefined
+      }
     </Layout>
   )
 }

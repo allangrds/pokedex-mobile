@@ -20,9 +20,12 @@ const mockApi = {
 describe('services', () => {
   describe('listPokemons', () => {
     it('should call the endpoint and return data', async () => {
-      const response = await listPokemons(mockApi)
+      const response = await listPokemons(mockApi, {
+        offset: 4,
+        limit: 10,
+      })
 
-      expect(mockApi.get).toHaveBeenCalledWith('pokemon?offset=0&limit=5')
+      expect(mockApi.get).toHaveBeenCalledWith('pokemon?offset=4&limit=10')
       expect(response).toEqual(mockResponse)
     })
   })

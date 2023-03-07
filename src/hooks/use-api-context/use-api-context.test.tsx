@@ -1,5 +1,3 @@
-import * as React from 'react'
-
 import { Text } from 'react-native'
 import { render, renderHook } from '@testing-library/react-native'
 
@@ -39,6 +37,7 @@ describe('useApiContext', () => {
         // eslint-disable-next-line react-hooks/rules-of-hooks, @typescript-eslint/no-unused-vars
         const { api } = useApiContext()
         return <Text>Test 3</Text>
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         errorMessage = error.message
 

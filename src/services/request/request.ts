@@ -1,10 +1,6 @@
 import * as http from 'http'
 
-class FetchError extends Error {
-  constructor (public res: Response, message?: string) {
-    super(message)
-  }
-}
+import { FetchError } from '../../errors'
 
 export const request = (baseUrl: string) => {
   const requester = (endpoint: string, options?: http.RequestOptions) => {
@@ -21,7 +17,9 @@ export const request = (baseUrl: string) => {
 
     return fetch(url, newOptions).then(async (response) => {
       if (!response.ok) {
-        throw new FetchError(response)
+        const error = new FetchError(response.statusText, response.status)
+        error.response = response
+        throw error
       }
 
       try {
