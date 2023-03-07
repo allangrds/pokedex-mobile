@@ -363,3 +363,16 @@ export type PokemonShortResponse = {
   artwork: string
   types: string[]
 }
+
+export interface PokemonLongResponse extends PokemonShortResponse {
+  abilities: string[]
+  species: string
+  stats: {
+    hp: number
+    attack: number
+    defense: number
+    'special-attack': number
+    'special-defense': number
+    speed: number
+  }
+}

@@ -9,6 +9,17 @@ on:
     branches: [main]
 
 jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [ '16' ]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install modules
+      run: npm ci
+    - name: Run Typescript typecheck
+      run: npm run typecheck
   lint:
     runs-on: ubuntu-latest
     strategy:
@@ -20,3 +31,14 @@ jobs:
       run: npm ci
     - name: Run ESLint and Stylelint
       run: npm run eslint
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [ '16' ]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install modules
+      run: npm ci
+    - name: Run Jest
+      run: npm run test

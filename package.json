@@ -11,6 +11,7 @@
     "test:watch": "jest --watch",
     "eslint": "eslint \"{src,apps,libs,test}/**/*.{js,jsx,ts,tsx}\" --fix",
     "format": "prettier --write \"**/*.{js,ts,tsx,md}\"",
+    "typecheck": "tsc --noEmit",
     "commit": "cz"
   },
   "dependencies": {

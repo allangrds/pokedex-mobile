@@ -7,5 +7,5 @@ export type PokemonsResponse = {
   count: number
   next: string | null
   previous: string
-  results: Pokemon[] | []
+  results: PokemonsResults[] | []
 }

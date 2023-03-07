@@ -6,8 +6,13 @@ import {
   listPokemons as fetchListPokemons,
 } from '../services'
 import { FetchError } from '../errors'
-
-import { Api, PokemonResponse, PokemonShortResponse, PokemonsResults } from '../types'
+import {
+  Api,
+  PokemonLongResponse,
+  PokemonShortResponse,
+  PokemonsResults,
+} from '../types'
+import { PokemonDto, PokemonsDto } from '../dtos'
 
 const getPokemonsList = async (api: Api, offset: number, limit: number) => {
   const response = await fetchListPokemons(api, { offset, limit })
@@ -30,17 +35,6 @@ const getPokemonsIds = (pokemonsList: PokemonsResults[]) => {
   return pokemonsIds
 }
 
-const formatPokemonInformation = (
-  pokemon: PokemonResponse
-): PokemonShortResponse => ({
-  id: pokemon.id,
-  name: pokemon.name,
-  artwork: pokemon.sprites.other['official-artwork'].front_default,
-  types: pokemon.types.map((
-    type: { type: { name: string }}
-  ) => type.type.name),
-})
-
 const getPokemonsInformation = async (api: Api, pokemonsIds? : string[]) => {
   if (!pokemonsIds) {
     return Promise.resolve([])
@@ -53,7 +47,7 @@ const getPokemonsInformation = async (api: Api, pokemonsIds? : string[]) => {
 
   const pokemonsFormatedData = pokemonData.map(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (pokemon: any) => formatPokemonInformation(pokemon)
+    (pokemon: any) => PokemonsDto.parseData(pokemon)
   )
 
   return pokemonsFormatedData
@@ -66,6 +60,7 @@ export const usePokemons = () => {
   const [pokemons, setPokemons] = React.useState<
     PokemonShortResponse[] | null
   >(null)
+  const [pokemon, setPokemon] = React.useState<PokemonLongResponse>()
   const [offset, setOffset] = React.useState(0)
   const BASE_OFFSET = 8
 
@@ -109,13 +104,40 @@ export const usePokemons = () => {
       const choosedPokemon = await fetchFindPokemon(api, text)
 
       if (!choosedPokemon) {
+        setLoadingPokemons(false)
+
+        return
+      }
+
+      const formatedPokemon = PokemonDto.parseData(choosedPokemon)
+
+      setPokemon(formatedPokemon)
+      setLoadingPokemons(false)
+    } catch (error: unknown) {
+      if (error instanceof FetchError) {
+        if (error.status === 404) {
+          return
+        }
+
+        setErrorPokemons(error.message)
+      }
+    }
+  }
+
+  const findAll = async (text: string) => {
+    setLoadingPokemons(true)
+
+    try {
+      const choosedPokemon = await fetchFindPokemon(api, text)
+
+      if (!choosedPokemon) {
         setPokemons(null)
         setLoadingPokemons(false)
 
         return
       }
 
-      const formatedPokemon = formatPokemonInformation(choosedPokemon)
+      const formatedPokemon = PokemonsDto.parseData(choosedPokemon)
 
       setPokemons([formatedPokemon])
       setLoadingPokemons(false)
@@ -164,10 +186,12 @@ export const usePokemons = () => {
   return {
     errorPokemons,
     find,
+    findAll,
     list,
     loadingPokemons,
     loadMore,
     pokemons,
+    pokemon,
     refreshingPokemons,
   }
 }
