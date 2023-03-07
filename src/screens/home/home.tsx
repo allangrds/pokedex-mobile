@@ -2,20 +2,26 @@ import * as React from 'react'
 
 import { RefreshControl, View } from 'react-native'
 import { Input, Layout, List, ListItem, Text } from '@ui-kitten/components'
+import { NavigationProp, ParamListBase } from '@react-navigation/native'
 
 import { Alert, Loading, PokemonListItem } from '../../components'
 import { usePokemons } from '../../hooks'
 import { PokemonShortResponse } from '../../types'
+import { routes } from '../../routes/routes'
 
 import { styles } from './home.styles'
 
 let timeoutId: ReturnType<typeof setTimeout>
 
-export const HomeScreen = () => {
+type Props = {
+  navigation: NavigationProp<ParamListBase>
+}
+
+export const HomeScreen = ({ navigation }: Props) => {
   const [shouldLoadMore, setShouldLoadMore] = React.useState<boolean>(true)
   const {
     errorPokemons,
-    find,
+    findAll,
     list,
     loadMore,
     loadingPokemons,
@@ -37,8 +43,13 @@ export const HomeScreen = () => {
       }
 
       setShouldLoadMore(false)
-      find(text)
+      findAll(text)
     }, 1500)
+  }
+  const handleOnPressPokemon = (name: string) => {
+    navigation.navigate(routes.details, {
+      name,
+    })
   }
 
   const renderItem = (
@@ -46,6 +57,7 @@ export const HomeScreen = () => {
   ) => (
     <ListItem style={styles.listItemWrapper}>
       <PokemonListItem
+        onPress={handleOnPressPokemon}
         name={item.name}
         artwork={item.artwork}
         types={item.types}

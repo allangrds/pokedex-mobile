@@ -1,14 +1,14 @@
 import { NavigationContainer } from '@react-navigation/native'
 import { ApiContextProvider, UiKittenProvider } from './providers'
 
-import { Routes } from './routes'
+import { Router } from './routes'
 
 export const Main = () => (
   <>
     <UiKittenProvider>
       <ApiContextProvider>
         <NavigationContainer>
-          <Routes />
+          <Router />
         </NavigationContainer>
       </ApiContextProvider>
     </UiKittenProvider>

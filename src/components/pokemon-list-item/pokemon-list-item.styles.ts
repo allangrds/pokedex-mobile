@@ -14,6 +14,10 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     textTransform: 'capitalize',
   },
+  pokemonType: {
+    fontSize: 20,
+    textTransform: 'capitalize',
+  },
   pokemonImage: {
     width: 100,
     height: 100,
