@@ -1,5 +1,5 @@
 import { Text } from 'react-native'
-import { render, renderHook } from '@testing-library/react-native'
+import { render, renderHook, screen } from '@testing-library/react-native'
 
 import { ApiProvider, useApiContext } from './use-api-context'
 
@@ -9,13 +9,13 @@ const fakeApi = {
 
 describe('ApiProvider', () => {
   it('should render correcly', () => {
-    const { getByText } = render(
+    render(
       <ApiProvider api={fakeApi}>
         <Text>hello world</Text>
       </ApiProvider>
     )
 
-    expect(getByText('hello world')).toBeDefined()
+    expect(screen.getByText('hello world')).toBeDefined()
   })
 })
 
