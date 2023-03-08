@@ -1,18 +1,18 @@
 import * as React from 'react'
 
-import { useApiContext } from '../hooks/use-api-context'
+import { useApiContext } from '../../hooks/use-api-context'
 import {
   findPokemon as fetchFindPokemon,
   listPokemons as fetchListPokemons,
-} from '../services'
-import { FetchError } from '../errors'
+} from '../../services'
+import { FetchError } from '../../errors'
 import {
   Api,
   PokemonLongResponse,
   PokemonShortResponse,
   PokemonsResults,
-} from '../types'
-import { PokemonDto, PokemonsDto } from '../dtos'
+} from '../../types'
+import { PokemonDto, PokemonsDto } from '../../dtos'
 
 const getPokemonsList = async (api: Api, offset: number, limit: number) => {
   const response = await fetchListPokemons(api, { offset, limit })
@@ -114,6 +114,8 @@ export const usePokemons = () => {
       setPokemon(formatedPokemon)
       setLoadingPokemons(false)
     } catch (error: unknown) {
+      setLoadingPokemons(false)
+
       if (error instanceof FetchError) {
         if (error.status === 404) {
           return
