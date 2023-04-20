@@ -20,6 +20,7 @@
 
 ## How to execute
 
+- Copy `.env.example` to `.env`
 - Execute `npx expo start` and choose your favorite device
 
 ## Technologies
